@@ -3,19 +3,11 @@
 //pin A2 -> motorB
 //pin 2 -> button
 
-//เก็บตัวอักษรที่ได้รับ
-char rx = 0;
-
 // motor
 int speed1 = 255;       //แรงตี
-int speed2 = 25;        //หมุนกลับ
 const int move = 6;     //pwm
 const int motorF = A1;  //direct of motor
 const int motorB = A2;
-
-// voice sensor
-const int sensor = A4;
-int value = 0;
 
 // set pin numbers:
 const int buttonPin = 2;    // limit switch
@@ -36,17 +28,6 @@ void setup() {
 }
 
 void loop() {
-  if(Serial.available() > 0) //รับ input จาก Serial
-  {
-    rx = Serial.read();
-    if(rx == '1') {
-      Motor_Check();  //ตี
-      //Motor_Back();   //หมุนกลับ
-    }
-    else if(rx == '0'){
-      Stop();
-    }
-  }
   Check_Button(); //ตรวจจับการชนของปุ่ม
 }
 
@@ -56,24 +37,9 @@ void Motor_Check()
   digitalWrite(motorF, 1); //กำหนดการทำงานของ pin //digitalWrite(pin ที่ใช้, high/low)
   digitalWrite(motorB, 0);
   analogWrite(move, speed1);  //กำหนดการใช้ทำงาน motor //analogWrite(pwm, ความเร็ว) //สั่งการหมุน
-  value = analogRead(sensor);
-  Serial.println(value);
-  // delay(500); //ตีนานแค่ไหน
-  if (value <= 50) {
-    Serial.println("Not Ready");
-  }
-  else {
-    Serial.println("Ready !!");
-  }
-  // Stop();
+  delay(10000); //ตีนานแค่ไหน 1000 = 1 วินาที
 }
 
-void Motor_Back()
-{
-  digitalWrite(motorF, 0);
-  digitalWrite(motorB, 1);
-  analogWrite(move, speed2);
-}
 void Stop()
 {
   digitalWrite(motorF, 0);
@@ -93,6 +59,7 @@ void Check_Button()
     if (reading != buttonState) {   //ค่าตรงข้ามกับที่ตั้งไว้หรือไม่
       buttonState = reading;        //นำค่าที่ได้มากำหนดเป็นสถานะ
       if (buttonState == HIGH) {    //ถ้าตรงเงื่อนไข
+        Motor_Check();
         Stop();
       }
     }
