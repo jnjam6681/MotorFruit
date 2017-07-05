@@ -37,7 +37,8 @@ void Motor_Check()
   digitalWrite(motorF, 1); //กำหนดการทำงานของ pin //digitalWrite(pin ที่ใช้, high/low)
   digitalWrite(motorB, 0);
   analogWrite(move, speed1);  //กำหนดการใช้ทำงาน motor //analogWrite(pwm, ความเร็ว) //สั่งการหมุน
-  delay(10000); //ตีนานแค่ไหน 1000 = 1 วินาที
+  delay(5000); //ตีนานแค่ไหน 1000 = 1 วินาที
+  Stop();
 }
 
 void Stop()
@@ -58,9 +59,8 @@ void Check_Button()
   if ((millis() - lastDebounceTime) > debounceDelay) { //จับสัญญาณปุ่มใช้ช่วงที่กำหนด(50 millis)
     if (reading != buttonState) {   //ค่าตรงข้ามกับที่ตั้งไว้หรือไม่
       buttonState = reading;        //นำค่าที่ได้มากำหนดเป็นสถานะ
-      if (buttonState == HIGH) {    //ถ้าตรงเงื่อนไข
+      if (buttonState == LOW) {    //ถ้าตรงเงื่อนไข
         Motor_Check();
-        Stop();
       }
     }
   }
